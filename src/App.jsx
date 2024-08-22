@@ -71,7 +71,7 @@ export default function App() {
   function toggleExpand(id) {
     const targetArticle = getTargetArticle(id)
     targetArticle.expanded = !targetArticle.expanded
-    setArticleQueue(savedArticles)
+    setArticleQueue([...savedArticles])
   }
 
   /*-------------------------------------------------------------------------*/
@@ -104,15 +104,38 @@ export default function App() {
 		4. Doğru çalıştığından emin olmak için uygulamayı test etmelisiniz. Yukarıdaki görevleri tamamladıktan sonra, daha fazla butonuna tıkladığınızda bir makale genişlemeli, kalp şeklindeki favori butonuna tıkladığınızda açılıp kapanmalı ve arşiv veya çöp kutusu butonuna tıkladığınızda makale kaybolmalıdır. Uygulamanın üst kısmındaki sayılar da favorilere eklediğiniz, arşivlediğiniz veya çöpe attığınız makale sayısını yansıtmalıdır. 
 		   
 		Bonus Görev: Yukarıda listelenen dört fonksiyon kuruldukları şekilde çalışacak olsalar da (dördüncüyü düzelttikten sonra), alışılmışın dışında ve tartışmalı bir şekilde "yanlış" giden bir şey var - React Dokümantasyonunun karşı uyardığı bir şey. Bakalım ne olduğunu bulabilecek misiniz.  
-
-
-		
  */
+
+
+  const handleClickButton = (e) => {
+    const buttonType = e.target.dataset.buttonType
+    const articleId = e.target.dataset.articleId
+
+    console.log(buttonType)
+    console.log(articleId)
+    
+    if (!buttonType || !articleId) return
+
+    /*articleId değerini bir tam sayıya dönüştürür. parseInt fonksiyonu, bir stringi belirtilen tabanda (radix) bir tam sayıya dönüştürmek için kullanılır.
+    Burada ikinci argüman olarak 10 verilmiştir, bu da tabanın (radix) 10 olduğunu belirtir. Yani bu işlem, articleId string'ini ondalık (decimal) bir sayıya dönüştürür.*/
+    //Fakat burada buna iihtiyaç yok çünkü id ler metin.
+    //const id = parseInt(articleId,10)
+
+    if(buttonType === "favorite") {
+      favorite(articleId)
+    } else if(buttonType === "archive"){
+      archive(articleId)
+    } else if(buttonType === "trash") {
+      trash(articleId)
+    } else if (buttonType === "toggleExpand") {
+      toggleExpand(articleId)
+    }
+  }
 
   return (
     <div className='wrapper'>
       <Header stats={stats} setArticleQueue={setArticleQueue} />
-      <div className='articles-container'>
+      <div onClick={handleClickButton} className='articles-container'>
         {articleQueue.length > 0 ? articleComponents : noArticlesMessage}
       </div>
     </div>
